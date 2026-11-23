@@ -9,7 +9,7 @@ Fase 2 concluída: pacote `.fudpkg` embutido + importador idempotente + Room v2.
 3. Exportação/importação dos dados do diário.
 
 ## Pendências menores
-- Confirmar CI verde do commit da Fase 2.
+- CI verde no commit `8d2629a` (run 45181011058), artefato `fudcalc-debug-apk`.
 - Teste automatizado da migração 1→2 exigiria `exportSchema = true` + `room-testing`.
 - Opcional: `actions/checkout@v5` e `actions/setup-java@v5` (aviso Node 20).
 
