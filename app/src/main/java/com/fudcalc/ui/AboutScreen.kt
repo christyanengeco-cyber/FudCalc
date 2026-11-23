@@ -10,21 +10,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.fudcalc.data.FoodRepository
 
 private const val TEXT = """
-FudCalc 0.1.0 — diário alimentar local.
+FudCalc 0.2.0 — diário alimentar local.
 
 FUNCIONA OFFLINE
 Todos os dados ficam no banco local do aparelho. Nenhum registro é enviado para servidores. O aplicativo não pede conta e não tem telemetria.
 
+PACOTE NUTRICIONAL
+{pacote}
+
 FONTES DOS DADOS
-Os valores vêm identificados com fonte e versão. Esta versão traz uma semente pequena da TACO 4ª ed.; o pacote nutricional completo e verificado entra na Fase 2. Campos sem dado aparecem como "—" (fonte não possui) ou "n/i" (campo vazio na fonte). Nunca são exibidos como zero.
+Os valores vêm identificados com fonte e versão, e o pacote importado é verificado por checksum (SHA-256). Campos sem dado aparecem como "—" (fonte não possui) ou "n/i" (campo vazio na fonte). Nunca são exibidos como zero. Atualizar o pacote não altera registros já lançados: cada registro guarda uma cópia dos valores usados no momento.
 
 CÁLCULOS
 Calorias e nutrientes são proporcionais à quantidade informada em gramas, a partir da base de 100 g do alimento. Medidas caseiras são convertidas para gramas aproximados antes do cálculo. Todos os valores do diário são calculados, não medidos.
 
 LIMITAÇÕES DESTA VERSÃO
-- Sem importação de pacotes TACO/TBCA.
+- O pacote embutido é um subconjunto de 11 alimentos da TACO, não a tabela completa; os valores não foram auditados item a item contra a fonte.
+- Sem importação de arquivo externo escolhido pelo usuário (só o pacote embutido).
 - Sem scanner de código de barras ou Open Food Facts.
 - Sem OCR de rótulos.
 - Sem receitas.
@@ -40,12 +45,17 @@ Código sob licença MIT. As bases de dados e modelos mantêm suas próprias lic
 """
 
 @Composable
-fun AboutScreen() {
+fun AboutScreen(packageInfo: FoodRepository.PackageInfo?, importError: String? = null) {
+    val packageLine = when {
+        importError != null -> "Falha ao importar: $importError"
+        packageInfo == null -> "Importando…"
+        else -> "${packageInfo.source} — ${packageInfo.version}\n${packageInfo.itemCount} alimentos disponíveis."
+    }
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
     ) {
         Text(
-            TEXT.trimIndent(),
+            TEXT.trimIndent().replace("{pacote}", packageLine),
             style = MaterialTheme.typography.bodyMedium,
         )
     }

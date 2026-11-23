@@ -21,6 +21,10 @@ data class FoodEntity(
     val referenceGrams: Double,
     @Embedded val nutrients: NutrientColumns,
     val updatedAt: Long?,
+    /** Pacote que forneceu o alimento; nulo para alimentos criados pelo usuário. */
+    val packageId: String? = null,
+    /** Item retirado de uma versão posterior do pacote fica indisponível, mas não é apagado. */
+    val available: Boolean = true,
 )
 
 @Entity(

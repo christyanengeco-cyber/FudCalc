@@ -1,0 +1,20 @@
+fudcalc-package 1
+id=taco
+name=Tabela Brasileira de Composição de Alimentos (TACO)
+version=4ª ed. (2011) — subconjunto inicial de 11 alimentos
+source=NEPA/Unicamp — TACO
+license=Uso livre com atribuição à fonte
+sha256=1adf7d18704d2eaf7800e81cead40e88fc5d4368c37cea74c03c60b7f884b3a5
+---
+# id;nome;preparo;energia kcal;proteína g;carboidrato g;açúcar g;gordura g;gordura sat. g;gordura trans g;fibra g;sódio mg;porções
+taco:arroz-branco-cozido;Arroz, branco;cozido;128;2.5;28.1;;0.2;;;1.6;;colher de sopa=25
+taco:feijao-carioca-cozido;Feijão, carioca;cozido;76;4.8;13.6;;0.5;;;8.5;;concha=100
+taco:frango-peito-grelhado;Frango, peito, sem pele;grelhado;159;32.0;0.0;;2.5;;;0.0;;filé=100
+taco:ovo-cozido;Ovo, de galinha;cozido;146;13.3;0.6;;9.5;;;0.0;;unidade=50
+taco:banana-prata;Banana, prata;crua;98;1.3;26.0;;0.1;;;2.0;;unidade=70
+taco:pao-frances;Pão, francês;;300;8.0;58.6;;3.1;;;2.3;;unidade=50
+taco:leite-integral;Leite, de vaca, integral;;61;2.9;4.3;;3.2;;;0.0;;copo=200
+taco:batata-inglesa-cozida;Batata, inglesa;cozida;52;1.2;11.9;;0.0;;;1.3;;
+taco:azeite-oliva;Azeite, de oliva, extra virgem;;884;0.0;0.0;;100.0;;;0.0;;colher de sopa=13
+taco:tomate-cru;Tomate, cru;;15;1.1;3.1;;0.2;;;1.2;;
+taco:acucar-cristal;Açúcar, cristal;;387;0.3;99.9;;0.0;;;0.0;;

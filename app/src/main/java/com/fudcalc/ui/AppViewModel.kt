@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.fudcalc.data.ServiceLocator
+import com.fudcalc.data.FoodRepository
 import com.fudcalc.domain.food.Food
 import com.fudcalc.domain.meals.DiaryEntry
 import com.fudcalc.domain.meals.MealType
@@ -37,8 +38,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         .flatMapLatest { foodRepository.search(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    val packageInfo: StateFlow<FoodRepository.PackageInfo?> = foodRepository.packageInfo
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    private val importFailure = MutableStateFlow<String?>(null)
+    val importError: StateFlow<String?> = importFailure.asStateFlow()
+
     init {
-        viewModelScope.launch { foodRepository.ensureSeeded() }
+        viewModelScope.launch {
+            runCatching { foodRepository.ensureImported() }
+                .onFailure { importFailure.value = it.message ?: it::class.simpleName }
+        }
     }
 
     fun onQueryChange(value: String) {

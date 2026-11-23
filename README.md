@@ -2,7 +2,7 @@
 
 Diário alimentar Android offline-first, foco em alimentos brasileiros. Kotlin + Jetpack Compose + Room.
 
-Estado: **Fase 1 (fundação + diário mínimo)**. Nada aqui é simulação: os cálculos, o banco e o diário são reais; o que não existe está listado como não implementado.
+Estado: **Fase 2 (pacote nutricional versionado + diário mínimo)**. Nada aqui é simulação: os cálculos, o banco e o diário são reais; o que não existe está listado como não implementado.
 
 ## Como compilar
 
@@ -28,21 +28,35 @@ Instalar: `adb install -r app/build/outputs/apk/debug/app-debug.apk`
 - **Interface sem regra nutricional**: telas só chamam ViewModel/repositórios.
 - Sem `navigation-compose` ainda: 3 abas com estado simples. Introduzir navegação quando as telas de captura/OCR entrarem.
 
-## Semente de alimentos (atenção)
+## Pacote nutricional (atenção)
 
-`data/SeedFoods.kt` traz 11 itens da TACO 4ª ed. com valores por 100 g do estado de preparo. É um subconjunto **não auditado linha a linha**: **a Fase 2 deve substituí-lo pelo pacote oficial importado** e remover esta semente. Não use esta base para decisões clínicas.
+`app/src/main/assets/foods/taco.fudpkg` é o pacote embutido: cabeçalho com id, nome, versão, fonte, licença e `sha256` do corpo; depois uma linha por alimento (13 campos separados por `;`). Campo vazio = desconhecido, `ni` = não informado, `0` = zero real. Porções em `rótulo=gramas`.
+
+Importação (`data/packages/`): valida formato e checksum antes de tocar no banco; mesma checksum não reimporta; itens são atualizados por id estável; item que sai do pacote fica `available = 0` (não é apagado); porções só são regravadas quando o conteúdo muda. O diário nunca é reescrito.
+
+O conteúdo atual são **11 itens da TACO 4ª ed., não auditados linha a linha** — o mecanismo está pronto, a base completa ainda não. Não use para decisões clínicas. Para trocar a base, edite o arquivo e recalcule o `sha256` do corpo (tudo após a linha `---`, em UTF-8, com `\n`).
 
 Medidas caseiras (colher, concha, unidade) são aproximações; variam por utensílio. O app deixa claro que são aproximadas.
 
 ## Testes
 
-`app/src/test/java/com/fudcalc/domain/nutrition/NutritionMathTest.kt` — escala por gramas, zero vs ausente, propagação de desconhecido, origem calculada, somas, arredondamento HALF_UP, medida caseira, quantidade inválida.
+- `domain/nutrition/NutritionMathTest.kt` — escala por gramas, zero vs ausente, propagação de desconhecido, origem calculada, somas, arredondamento HALF_UP, medida caseira, quantidade inválida.
+- `data/packages/FoodPackageTest.kt` — cabeçalho, checksum divergente, CRLF, coluna faltando com número da linha, id repetido, valor negativo, energia obrigatória, porção inválida, pacote vazio, desconhecido vs zero vs não informado.
+- `data/packages/FoodPackageImporterTest.kt` (Robolectric + Room em memória) — import idempotente, atualização de valores, item adicionado/removido, diário preservado, pacote inválido não altera o banco, e o asset real importado com acentos corretos.
 
-Cobertura de banco (importação/atualização/duplicação) exige testes instrumentados ou Robolectric: entra junto com o importador de pacotes (Fase 2).
+26 testes. A migração 1→2 não tem teste automatizado (schema não exportado); foi verificada no aparelho.
 
 ### Verificação em aparelho (23/11/2026)
 
-Samsung SM-A366E, Android 17, APK debug instalado via adb. Verificado: semente carregada, busca, 150 g de arroz branco = 192 kcal (128/100 g), refeição e totais atualizados, exclusão com confirmação, dia vazio = 0 kcal, nenhum crash no logcat. Não verificado: fontes grandes, tablet, rotação, restauração de backup.
+Samsung SM-A366E, Android 17, APK debug via adb.
+
+Fase 1: semente carregada, busca, 150 g de arroz = 192 kcal, exclusão com confirmação, dia vazio = 0 kcal.
+
+Fase 2: atualização 0.1.0 → 0.2.0 sobre banco v1 **com 3 registros reais do usuário** — migração executada, os 3 registros e o total de 607 kcal intactos; pacote importado (11 alimentos) e exibido em "Sobre" com fonte e versão; busca sem acento ("feijao") encontra "Feijão"; quantidade inválida mantém "Adicionar" desabilitado; nenhum crash no logcat.
+
+Bug achado e corrigido no teste: o asset havia sido regravado por um script PowerShell que decodificou UTF-8 como Latin-1, gerando mojibake ("4Âª", "â€“") na fonte/versão. Corrigido e coberto por teste que lê o asset real.
+
+Não verificado: base grande (dezenas de milhares de itens), tablet, rotação, restauração de backup, migração a partir de banco com alimentos criados pelo usuário.
 
 ## Licenças
 
@@ -50,6 +64,6 @@ Samsung SM-A366E, Android 17, APK debug instalado via adb. Verificado: semente c
 - TACO: dados do projeto TACO/NEPA-UNICAMP; redistribuição deve ser verificada antes de embarcar o pacote completo.
 - AndroidX/Compose/Room/Kotlin: Apache 2.0.
 
-## Próxima etapa (Fase 2)
+## Próxima etapa (Fase 3)
 
-Importador de pacotes nutricionais com versão, licença, checksum e idempotência; modelo de proveniência completo; busca com medidas; testes de banco. Só depois: diário completo (favoritos, reutilizar refeição) e produtos.
+Base TACO/TBCA completa e auditada dentro do mesmo formato de pacote; importação de arquivo escolhido pelo usuário; exportação/importação dos dados do diário. Só depois: favoritos, reutilizar refeição, produtos e scanner.

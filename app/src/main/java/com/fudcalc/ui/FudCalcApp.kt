@@ -32,6 +32,8 @@ fun FudCalcApp(viewModel: AppViewModel) {
     val entries by viewModel.entries.collectAsStateWithLifecycle()
     val query by viewModel.query.collectAsStateWithLifecycle()
     val results by viewModel.results.collectAsStateWithLifecycle()
+    val packageInfo by viewModel.packageInfo.collectAsStateWithLifecycle()
+    val importError by viewModel.importError.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -91,7 +93,7 @@ fun FudCalcApp(viewModel: AppViewModel) {
                         tab = 0
                     },
                 )
-                else -> AboutScreen()
+                else -> AboutScreen(packageInfo = packageInfo, importError = importError)
             }
         }
     }
