@@ -4,6 +4,7 @@
 Fase 2 concluída: pacote `.fudpkg` embutido + importador idempotente + Room v2. 26 testes verdes, APK 0.2.0 instalado e verificado no SM-A366E sem perda dos registros do usuário.
 
 ## Próximo passo (Fase 3)
+Roadmap completo no README (fases 3 a 8). Fase 3:
 1. Base TACO/TBCA completa e auditada no mesmo formato (o usuário fornece o arquivo ou aprova uma extração pública verificada).
 2. Importação de pacote escolhido pelo usuário (arquivo externo) — hoje só o asset embutido.
 3. Exportação/importação dos dados do diário.

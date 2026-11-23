@@ -64,6 +64,33 @@ Não verificado: base grande (dezenas de milhares de itens), tablet, rotação, 
 - TACO: dados do projeto TACO/NEPA-UNICAMP; redistribuição deve ser verificada antes de embarcar o pacote completo.
 - AndroidX/Compose/Room/Kotlin: Apache 2.0.
 
-## Próxima etapa (Fase 3)
+## Roadmap
 
-Base TACO/TBCA completa e auditada dentro do mesmo formato de pacote; importação de arquivo escolhido pelo usuário; exportação/importação dos dados do diário. Só depois: favoritos, reutilizar refeição, produtos e scanner.
+Cada fase só entra quando a anterior estiver testada em aparelho. Nenhuma fase quebra as invariantes: offline, ausência de dado explícita, cálculo determinístico, histórico imutável.
+
+**Fase 3 — base completa e dados do usuário portáteis**
+- TACO/TBCA completa e auditada dentro do mesmo formato `.fudpkg` (fonte oficial conferida item a item, licença de redistribuição verificada).
+- Importar pacote escolhido pelo usuário (arquivo externo), com tela de conferência antes de aplicar.
+- Exportar/importar o diário (JSON/CSV) e backup local. Hoje o usuário não tem como tirar os dados do app.
+
+**Fase 4 — diário de uso diário**
+- Favoritos e recentes; reutilizar refeição de outro dia; refeições personalizadas.
+- Editar registro (gramas/refeição) sem perder o snapshot original.
+- Metas opcionais definidas pelo usuário (o app não prescreve valores).
+
+**Fase 5 — produtos industrializados**
+- Scanner de código de barras (CameraX + ML Kit) com cache offline; Open Food Facts só quando houver rede, sempre com fonte e data da consulta.
+- OCR de tabela nutricional com revisão humana obrigatória antes de salvar; nada é aceito silenciosamente.
+
+**Fase 6 — receitas**
+- Receita como soma de ingredientes com rendimento em gramas e porção; valores calculados, nunca estimados por modelo.
+- Preparo (cru/cozido/grelhado) preservado por ingrediente.
+
+**Fase 7 — análise por fotografia (opcional, por último)**
+- Modelo local (LiteRT/ONNX) apenas para sugerir alimento e porção; todo valor entra como `Estimated`, com confirmação do usuário.
+- Se a confiança for baixa, o app pede entrada manual em vez de inventar.
+
+**Fase 8 — leitura dos dados**
+- Histórico, médias e gráficos por período; exportação com proveniência (fonte, versão, origem de cada valor).
+
+Ordem pensada por dependência: sem base auditada (3) o resto herda dado ruim; sem exportação (3) o usuário fica preso ao app; foto (7) é a parte menos confiável e por isso vai por último.

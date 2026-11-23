@@ -7,4 +7,5 @@
 - Bug corrigido: asset regravado por script PowerShell com decodificação Latin-1 gerava mojibake na fonte/versão; agora coberto por teste.
 - `f0f521d` Corrige total de dia vazio, formatação de gramas e subtotal de refeição vazia.
 - `7b2556d` Fase 1: fundação Android, domínio nutricional, Room e diário mínimo.
+- Roadmap das fases 3 a 8 no README (base auditada e exportação → diário → produtos/OCR → receitas → foto → relatórios).
 - Criados `init.md`, `changelog.md`, `handoff.md`.
