@@ -9,7 +9,7 @@ fun Double.format(decimals: Int = 1, unit: String = ""): String {
     val text = if (decimals == 0) {
         rounded.toLong().toString()
     } else {
-        String.format(Locale.ROOT, "%.${decimals}f", rounded)
+        String.format(Locale.ROOT, "%.${decimals}f", rounded).trimEnd('0').trimEnd('.')
     }
     return if (unit.isEmpty()) text else "$text $unit"
 }

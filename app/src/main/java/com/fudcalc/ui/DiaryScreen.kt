@@ -174,11 +174,13 @@ private fun MealHeader(meal: MealType, entries: List<DiaryEntry>) {
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.weight(1f),
         )
-        Text(
-            subtotal.energyKcal.format(0, "kcal"),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        if (entries.isNotEmpty()) {
+            Text(
+                subtotal.energyKcal.format(0, "kcal"),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 

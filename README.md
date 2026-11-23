@@ -40,6 +40,10 @@ Medidas caseiras (colher, concha, unidade) são aproximações; variam por utens
 
 Cobertura de banco (importação/atualização/duplicação) exige testes instrumentados ou Robolectric: entra junto com o importador de pacotes (Fase 2).
 
+### Verificação em aparelho (23/11/2026)
+
+Samsung SM-A366E, Android 17, APK debug instalado via adb. Verificado: semente carregada, busca, 150 g de arroz branco = 192 kcal (128/100 g), refeição e totais atualizados, exclusão com confirmação, dia vazio = 0 kcal, nenhum crash no logcat. Não verificado: fontes grandes, tablet, rotação, restauração de backup.
+
 ## Licenças
 
 - Código: MIT (ver `LICENSE`).

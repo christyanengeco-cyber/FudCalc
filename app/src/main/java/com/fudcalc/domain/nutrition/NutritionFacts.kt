@@ -27,11 +27,15 @@ data class NutritionFacts(
 
 /**
  * Soma de valores. Se qualquer parcela for desconhecida, o total é desconhecido:
- * um total parcial apresentado como total seria informação enganosa.
+ * um total parcial apresentado como total seria informação enganosa. Soma de zero registros
+ * é zero (nada consumido), e não "desconhecido".
  */
 fun Iterable<NutritionFacts>.sumFacts(): NutritionFacts {
     val list = toList()
-    if (list.isEmpty()) return NutritionFacts()
+    if (list.isEmpty()) {
+        val zero = NutrientValue.Value(0.0, Origin.Calculated)
+        return NutritionFacts(zero, zero, zero, zero, zero, zero, zero, zero, zero)
+    }
     return NutritionFacts(
         energyKcal = list.map { it.energyKcal }.sumNutrient(),
         proteinG = list.map { it.proteinG }.sumNutrient(),

@@ -61,8 +61,10 @@ class NutritionMathTest {
     }
 
     @Test
-    fun `soma vazia nao inventa zero`() {
-        assertEquals(NutrientValue.Unknown, emptyList<NutritionFacts>().sumFacts().energyKcal)
+    fun `soma vazia e zero calculado`() {
+        val total = emptyList<NutritionFacts>().sumFacts().energyKcal
+        assertEquals(0.0, total.numberOrNull()!!, 0.0)
+        assertEquals(Origin.Calculated, (total as NutrientValue.Value).origin)
     }
 
     @Test
